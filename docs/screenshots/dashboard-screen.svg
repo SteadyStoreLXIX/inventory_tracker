@@ -1,0 +1,11 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'>
+  <rect width='1200' height='700' fill='#f3f5fa'/>
+  <rect x='0' y='0' width='1200' height='95' fill='#2d5bca'/>
+  <text x='28' y='55' fill='white' font-size='34' font-family='Arial'>IT MSP Inventory Tracker - Dashboard</text>
+  <rect x='25' y='120' width='1150' height='160' rx='10' fill='white' stroke='#dce3f1'/>
+  <text x='45' y='160' fill='#17233a' font-size='24' font-family='Arial'>Add Inventory Item</text>
+  <rect x='25' y='300' width='1150' height='190' rx='10' fill='white' stroke='#dce3f1'/>
+  <text x='45' y='340' fill='#17233a' font-size='24' font-family='Arial'>Inventory Overview (CRUD)</text>
+  <rect x='25' y='510' width='1150' height='160' rx='10' fill='white' stroke='#dce3f1'/>
+  <text x='45' y='548' fill='#17233a' font-size='24' font-family='Arial'>Client Requirement Requests + Low Stock Alerts</text>
+</svg>

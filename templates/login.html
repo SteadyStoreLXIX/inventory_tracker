@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel narrow">
+  <h2>Login</h2>
+  <p class="muted">Default credentials are set by environment variables: <code>DEFAULT_ADMIN_USER</code> and <code>DEFAULT_ADMIN_PASSWORD</code>.</p>
+  <form action="{{ url_for('login') }}" method="post" class="stack-form">
+    <label>
+      Username
+      <input name="username" required />
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" required />
+    </label>
+    <button class="btn" type="submit">Sign in</button>
+  </form>
+</section>
+{% endblock %}

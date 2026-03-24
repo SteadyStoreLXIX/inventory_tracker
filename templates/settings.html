@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h2>Add Storage Location</h2>
+  <form action="{{ url_for('add_location') }}" method="post" class="grid-form">
+    <input name="name" placeholder="Location name" required />
+    <input name="room" placeholder="Room / Shelf" />
+    <input name="notes" placeholder="Notes" />
+    <button class="btn" type="submit">Add Location</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Room</th><th>Notes</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for location in locations %}
+      <tr>
+        <td>{{ location.name }}</td>
+        <td>{{ location.room or '-' }}</td>
+        <td>{{ location.notes or '-' }}</td>
+        <td>
+          <form action="{{ url_for('delete_location', location_id=location.id) }}" method="post">
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4">No locations yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Add Purchase Vendor</h2>
+  <form action="{{ url_for('add_vendor') }}" method="post" class="grid-form">
+    <input name="name" placeholder="Vendor name" required />
+    <input name="website" placeholder="Website URL" />
+    <input name="contact" placeholder="Contact info" />
+    <button class="btn" type="submit">Add Vendor</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Website</th><th>Contact</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for vendor in vendors %}
+      <tr>
+        <td>{{ vendor.name }}</td>
+        <td>
+          {% if vendor.website %}
+          <a href="{{ vendor.website }}" target="_blank" rel="noreferrer">{{ vendor.website }}</a>
+          {% else %}
+          -
+          {% endif %}
+        </td>
+        <td>{{ vendor.contact or '-' }}</td>
+        <td>
+          <form action="{{ url_for('delete_vendor', vendor_id=vendor.id) }}" method="post">
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4">No vendors yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

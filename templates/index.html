@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h2>Add Inventory Item</h2>
+  <form action="{{ url_for('add_item') }}" method="post" class="grid-form">
+    <input name="name" placeholder="Item name" required />
+    <input name="sku" placeholder="SKU / Part #" />
+    <input name="category" placeholder="Category" />
+    <input type="number" min="0" name="qty_main_office" placeholder="Qty at main office" />
+    <input type="number" min="0" name="qty_storage" placeholder="Qty in storage" />
+    <input type="number" min="0" name="reorder_threshold" placeholder="Reorder threshold" />
+    <select name="location_id">
+      <option value="">Storage location</option>
+      {% for location in all_locations %}
+        <option value="{{ location.id }}">{{ location.name }}{% if location.room %} ({{ location.room }}){% endif %}</option>
+      {% endfor %}
+    </select>
+    <select name="vendor_id">
+      <option value="">Primary vendor</option>
+      {% for vendor in all_vendors %}
+        <option value="{{ vendor.id }}">{{ vendor.name }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn" type="submit">Add Item</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Client Requirement Requests</h2>
+  <form action="{{ url_for('add_requirement') }}" method="post" class="grid-form">
+    <input name="client_name" placeholder="Client name" required />
+    <input name="project_name" placeholder="Project / Ticket" />
+    <select name="item_id" required>
+      <option value="">Select item</option>
+      {% for item in all_items %}
+        <option value="{{ item.id }}">{{ item.name }}</option>
+      {% endfor %}
+    </select>
+    <input type="number" min="1" name="quantity_needed" value="1" />
+    <select name="status">
+      <option>Needed</option>
+      <option>Ordered</option>
+      <option>Fulfilled</option>
+    </select>
+    <input name="notes" placeholder="Notes" />
+    <button class="btn" type="submit">Add Requirement</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Project</th>
+        <th>Item</th>
+        <th>Qty Needed</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in requirements %}
+      <tr>
+        <td>{{ req.client_name }}</td>
+        <td>{{ req.project_name or '-' }}</td>
+        <td>{{ req.item.name }}</td>
+        <td>{{ req.quantity_needed }}</td>
+        <td>{{ req.status }}</td>
+        <td>
+          <div class="action-group">
+            <form action="{{ url_for('update_requirement_status', requirement_id=req.id) }}" method="post" class="inline-form short">
+              <input type="number" min="1" name="quantity_needed" value="{{ req.quantity_needed }}" />
+              <select name="status">
+                <option {% if req.status == 'Needed' %}selected{% endif %}>Needed</option>
+                <option {% if req.status == 'Ordered' %}selected{% endif %}>Ordered</option>
+                <option {% if req.status == 'Fulfilled' %}selected{% endif %}>Fulfilled</option>
+              </select>
+              <button class="btn" type="submit">Save</button>
+            </form>
+            <form action="{{ url_for('delete_requirement', requirement_id=req.id) }}" method="post">
+              <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6">No client requirements yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Inventory Overview</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Details</th>
+        <th>Main Office</th>
+        <th>Storage</th>
+        <th>Location</th>
+        <th>Vendor</th>
+        <th>Reorder @</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>SKU: {{ item.sku or '-' }}<br/>Category: {{ item.category or '-' }}</td>
+        <td>{{ item.qty_main_office }}</td>
+        <td>{{ item.qty_storage }}</td>
+        <td>{{ item.location.name if item.location else '-' }}</td>
+        <td>
+          {% if item.vendor and item.vendor.website %}
+            <a href="{{ item.vendor.website }}" target="_blank" rel="noreferrer">{{ item.vendor.name }}</a>
+          {% else %}
+            {{ item.vendor.name if item.vendor else '-' }}
+          {% endif %}
+        </td>
+        <td>{{ item.reorder_threshold }}</td>
+        <td>
+          <div class="action-group vertical">
+            <form action="{{ url_for('update_item', item_id=item.id) }}" method="post" class="inline-form">
+              <input name="name" value="{{ item.name }}" />
+              <input name="sku" value="{{ item.sku or '' }}" placeholder="SKU" />
+              <input name="category" value="{{ item.category or '' }}" placeholder="Category" />
+              <input type="number" min="0" name="qty_main_office" value="{{ item.qty_main_office }}" />
+              <input type="number" min="0" name="qty_storage" value="{{ item.qty_storage }}" />
+              <input type="number" min="0" name="reorder_threshold" value="{{ item.reorder_threshold }}" />
+              <select name="location_id">
+                <option value="">No location</option>
+                {% for location in all_locations %}
+                  <option value="{{ location.id }}" {% if item.location_id == location.id %}selected{% endif %}>{{ location.name }}</option>
+                {% endfor %}
+              </select>
+              <select name="vendor_id">
+                <option value="">No vendor</option>
+                {% for vendor in all_vendors %}
+                  <option value="{{ vendor.id }}" {% if item.vendor_id == vendor.id %}selected{% endif %}>{{ vendor.name }}</option>
+                {% endfor %}
+              </select>
+              <button class="btn" type="submit">Update</button>
+            </form>
+            <form action="{{ url_for('delete_item', item_id=item.id) }}" method="post">
+              <button class="btn btn-danger" type="submit">Delete Item</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8">No inventory items yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="panel warning-panel">
+  <h2>Low Stock Alerts</h2>
+  <ul>
+    {% for item in low_stock %}
+      <li>{{ item.name }} total stock ({{ item.qty_main_office + item.qty_storage }}) is at or below reorder threshold ({{ item.reorder_threshold }})</li>
+    {% else %}
+      <li>No low stock alerts.</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

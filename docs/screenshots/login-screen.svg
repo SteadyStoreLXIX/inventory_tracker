@@ -1,0 +1,13 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'>
+  <rect width='1200' height='700' fill='#f3f5fa'/>
+  <rect x='0' y='0' width='1200' height='95' fill='#2d5bca'/>
+  <text x='28' y='55' fill='white' font-size='34' font-family='Arial'>IT MSP Inventory Tracker - Login</text>
+  <rect x='360' y='170' width='480' height='340' rx='12' fill='white' stroke='#dce3f1'/>
+  <text x='390' y='225' fill='#17233a' font-size='30' font-family='Arial'>Login</text>
+  <rect x='390' y='260' width='420' height='52' rx='7' fill='#fff' stroke='#dce3f1'/>
+  <text x='404' y='293' fill='#5e6b85' font-size='20' font-family='Arial'>Username</text>
+  <rect x='390' y='335' width='420' height='52' rx='7' fill='#fff' stroke='#dce3f1'/>
+  <text x='404' y='368' fill='#5e6b85' font-size='20' font-family='Arial'>Password</text>
+  <rect x='390' y='412' width='150' height='52' rx='8' fill='#2d5bca'/>
+  <text x='430' y='444' fill='white' font-size='20' font-family='Arial'>Sign in</text>
+</svg>
